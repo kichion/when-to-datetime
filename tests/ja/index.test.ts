@@ -35,4 +35,28 @@ describe("test", () => {
     targetDate.setDate(targetDate.getDate() - 2);
     expect(whenToDate("一昨日")).toEqual(targetDate);
   });
+
+  test("来週は7日後を返す", () => {
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + 7);
+    expect(whenToDate("来週")).toEqual(targetDate);
+  });
+
+  test("先週は7日前を返す", () => {
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() - 7);
+    expect(whenToDate("先週")).toEqual(targetDate);
+  });
+
+  test("再来週は14日後を返す", () => {
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + 14);
+    expect(whenToDate("再来週")).toEqual(targetDate);
+  });
+
+  test("先々週は14日前を返す", () => {
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() - 14);
+    expect(whenToDate("先々週")).toEqual(targetDate);
+  });
 });

@@ -14,5 +14,6 @@
     "declaration": true,
     "newLine": "lf",
     "outDir": "dist"
-  }
+  },
+  "exclude": ["node_modules", "tests"]
 }

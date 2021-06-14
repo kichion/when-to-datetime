@@ -1,4 +1,4 @@
-import { advanceBy, advanceTo, clear } from "jest-date-mock";
+import { advanceTo, clear } from "jest-date-mock";
 import { whenToDate } from "#/ja";
 
 describe("test", () => {
@@ -58,5 +58,25 @@ describe("test", () => {
     const targetDate = new Date();
     targetDate.setDate(targetDate.getDate() - 14);
     expect(whenToDate("先々週")).toEqual(targetDate);
+  });
+
+  test("来週 火曜は翌週火曜日の日付を返す", () => {
+    expect(whenToDate("来週", "火曜")).toEqual(new Date("2019/8/6 12:00:00"));
+  });
+
+  test("再来週 金曜日は再来週金曜日の日付を返す", () => {
+    expect(whenToDate("再来週", "金曜日")).toEqual(
+      new Date("2019/8/16 12:00:00")
+    );
+  });
+
+  test("先週 月は先週月曜日の日付を返す", () => {
+    expect(whenToDate("先週", "月")).toEqual(new Date("2019/7/22 12:00:00"));
+  });
+
+  test("先々週 木曜日は再来週金曜日の日付を返す", () => {
+    expect(whenToDate("先々週", "木曜日")).toEqual(
+      new Date("2019/7/18 12:00:00")
+    );
   });
 });

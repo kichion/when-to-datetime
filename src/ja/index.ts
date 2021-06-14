@@ -11,7 +11,7 @@ export const whenToDate = (when: When, dayOfWeek?: DayOfWeek): Date => {
   if (!weeklyExpressions.includes(when as any))
     return getAddedDate(whenMapping[when]);
 
-  return new Date();
+  return weeklyDate(when as WeeklyWhen, dayOfWeek);
 };
 
 const whenMapping: { [key in When]: number } = {
@@ -26,8 +26,27 @@ const whenMapping: { [key in When]: number } = {
   ["先々週"]: -14,
 };
 
+const dayOfWeekMapping: { [key in dayOfWeek]: number } = {
+  ["日"]: 0,
+  ["月"]: 1,
+  ["火"]: 2,
+  ["水"]: 3,
+  ["木"]: 4,
+  ["金"]: 5,
+  ["土"]: 6,
+};
+
 const getAddedDate = (add: number): Date => {
   const targetDate = new Date();
   targetDate.setDate(targetDate.getDate() + add);
   return targetDate;
+};
+
+const weeklyDate = (when: WeeklyWhen, dayOfWeek: DayOfWeek): Date => {
+  const targetWeek = getAddedDate(whenMapping[when]);
+  const day: dayOfWeek = (dayOfWeek as string).charAt(0) as dayOfWeek;
+  targetWeek.setDate(
+    targetWeek.getDate() + dayOfWeekMapping[day] - targetWeek.getDay()
+  );
+  return targetWeek;
 };

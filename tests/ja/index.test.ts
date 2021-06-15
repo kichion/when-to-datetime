@@ -1,7 +1,7 @@
 import { advanceTo, clear } from "jest-date-mock";
-import { whenToDate } from "#/ja";
+import { whenToDate, weeklyToDate } from "#/ja";
 
-describe("test", () => {
+describe("whenToDate", () => {
   beforeAll(() => {
     advanceTo(new Date("2019/8/1 12:00:00"));
   });
@@ -78,5 +78,30 @@ describe("test", () => {
     expect(whenToDate("先々週", "木曜日")).toEqual(
       new Date("2019/7/18 12:00:00")
     );
+  });
+});
+
+describe("whenToDate", () => {
+  beforeAll(() => {
+    advanceTo(new Date("2019/8/1 12:00:00"));
+  });
+  afterAll(() => {
+    clear();
+  });
+
+  test("1週間後は7日後を返す", () => {
+    expect(weeklyToDate("1週間後")).toEqual(new Date("2019/8/8 12:00:00"));
+  });
+
+  test("1週間前は7日前を返す", () => {
+    expect(weeklyToDate("1週間前")).toEqual(new Date("2019/7/25 12:00:00"));
+  });
+
+  test("5週間後は35日後を返す", () => {
+    expect(weeklyToDate("5週間後")).toEqual(new Date("2019/9/5 12:00:00"));
+  });
+
+  test("8週間前は56日前を返す", () => {
+    expect(weeklyToDate("8週間前")).toEqual(new Date("2019/6/6 12:00:00"));
   });
 });

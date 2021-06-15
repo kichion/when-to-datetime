@@ -6,6 +6,14 @@ export type WeeklyWhen = typeof weeklyExpressions[number];
 type dayOfWeek = "月" | "火" | "水" | "木" | "金" | "土" | "日";
 export type DayOfWeek = dayOfWeek | `${dayOfWeek}曜` | `${dayOfWeek}曜日`;
 
+export type Weekly = `${number}週間後` | `${number}週間前`;
+
+export const weeklyToDate = (weekly: Weekly): Date => {
+  const week = weekly.split("週間");
+  const offset = week[1] === "後" ? 7 : -7;
+  return getAddedDate(+week[0] * offset);
+};
+
 export const whenToDate = (when: When, dayOfWeek?: DayOfWeek): Date => {
   if (!dayOfWeek) return getAddedDate(whenMapping[when]);
   if (!weeklyExpressions.includes(when as any))

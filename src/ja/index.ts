@@ -8,10 +8,22 @@ export type DayOfWeek = dayOfWeek | `${dayOfWeek}曜` | `${dayOfWeek}曜日`;
 
 export type Weekly = `${number}週間後` | `${number}週間前`;
 
-export const weeklyToDate = (weekly: Weekly): Date => {
+export const toDate = (w: When | Weekly): Date => {
+  if (w.includes("週間")) return weeklyToDate(w as Weekly);
+  return whenToDate(w as When);
+};
+
+export const weeklyToDate = (weekly: Weekly, dayOfWeek?: DayOfWeek): Date => {
   const week = weekly.split("週間");
   const offset = week[1] === "後" ? 7 : -7;
-  return getAddedDate(+week[0] * offset);
+  const targetWeek = getAddedDate(+week[0] * offset);
+  if (!dayOfWeek) return targetWeek;
+
+  const day: dayOfWeek = (dayOfWeek as string).charAt(0) as dayOfWeek;
+  targetWeek.setDate(
+    targetWeek.getDate() + dayOfWeekMapping[day] - targetWeek.getDay()
+  );
+  return targetWeek;
 };
 
 export const whenToDate = (when: When, dayOfWeek?: DayOfWeek): Date => {

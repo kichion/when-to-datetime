@@ -81,7 +81,7 @@ describe("whenToDate", () => {
   });
 });
 
-describe("whenToDate", () => {
+describe("weeklyToDate", () => {
   beforeAll(() => {
     advanceTo(new Date("2019/8/1 12:00:00"));
   });
@@ -103,5 +103,17 @@ describe("whenToDate", () => {
 
   test("8週間前は56日前を返す", () => {
     expect(weeklyToDate("8週間前")).toEqual(new Date("2019/6/6 12:00:00"));
+  });
+
+  test("4週間前 火曜日は4週前の火曜日を返す", () => {
+    expect(weeklyToDate("4週間前", "火曜日")).toEqual(
+      new Date("2019/7/2 12:00:00")
+    );
+  });
+
+  test("3週間後 土は3週後の土曜日を返す", () => {
+    expect(weeklyToDate("3週間後", "土")).toEqual(
+      new Date("2019/8/24 12:00:00")
+    );
   });
 });

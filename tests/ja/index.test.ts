@@ -1,5 +1,5 @@
 import { advanceTo, clear } from "jest-date-mock";
-import { whenToDate, weeklyToDate } from "#/ja";
+import { whenToDate, weeklyToDate, monthlyToDate } from "#/ja";
 
 describe("whenToDate", () => {
   beforeAll(() => {
@@ -114,6 +114,43 @@ describe("weeklyToDate", () => {
   test("3週間後 土は3週後の土曜日を返す", () => {
     expect(weeklyToDate("3週間後", "土")).toEqual(
       new Date("2019/8/24 12:00:00")
+    );
+  });
+});
+
+describe("monthlyToDate", () => {
+  beforeAll(() => {
+    advanceTo(new Date("2019/8/1 12:00:00"));
+  });
+  afterAll(() => {
+    clear();
+  });
+
+  test("1ヶ月後は1月後を返す", () => {
+    expect(monthlyToDate("1ヶ月後")).toEqual(new Date("2019/9/1 12:00:00"));
+  });
+
+  test("1ヶ月前は1月前を返す", () => {
+    expect(monthlyToDate("1ヶ月前")).toEqual(new Date("2019/7/1 12:00:00"));
+  });
+
+  test("5ヶ月後は5月先を返す", () => {
+    expect(monthlyToDate("5ヶ月後")).toEqual(new Date("2020/1/1 12:00:00"));
+  });
+
+  test("8ヶ月前は8月前を返す", () => {
+    expect(monthlyToDate("8ヶ月前")).toEqual(new Date("2018/12/1 12:00:00"));
+  });
+
+  test("4ヶ月前 火曜日は4月前の火曜日を返す", () => {
+    expect(monthlyToDate("4ヶ月前", "火曜日")).toEqual(
+      new Date("2019/4/2 12:00:00")
+    );
+  });
+
+  test("3ヶ月後 土は3月後の土曜日を返す", () => {
+    expect(monthlyToDate("3ヶ月後", "土")).toEqual(
+      new Date("2019/11/2 12:00:00")
     );
   });
 });

@@ -3,14 +3,32 @@ export type When = "一昨日" | "昨日" | "今日" | "明日" | "明後日" | 
 const weeklyExpressions = ["先々週", "先週", "来週", "再来週"] as const;
 export type WeeklyWhen = typeof weeklyExpressions[number];
 
+const monthlyExpressions = ["先々月", "先月", "来月", "再来月"] as const;
+export type MonthlyWhen = typeof monthlyExpressions[number];
+
 type dayOfWeek = "月" | "火" | "水" | "木" | "金" | "土" | "日";
 export type DayOfWeek = dayOfWeek | `${dayOfWeek}曜` | `${dayOfWeek}曜日`;
 
 export type Weekly = `${number}週間後` | `${number}週間前`;
 
+export type Monthly = `${number}ヶ月後` | `${number}ヶ月前`;
+
 export const toDate = (w: When | Weekly): Date => {
   if (w.includes("週間")) return weeklyToDate(w as Weekly);
   return whenToDate(w as When);
+};
+
+export const monthlyToDate = (monthly: Monthly, dayOfWeek?: DayOfWeek): Date => {
+  const month = monthly.split("ヶ月");
+  const offset = month[1] === "後" ? 1 : -1;
+  const targetMonth = getAddedMonth(+month[0] * offset);
+  if (!dayOfWeek) return targetMonth;
+
+  const day: dayOfWeek = (dayOfWeek as string).charAt(0) as dayOfWeek;
+  targetMonth.setDate(
+    targetMonth.getDate() + dayOfWeekMapping[day] - targetMonth.getDay()
+  );
+  return targetMonth;
 };
 
 export const weeklyToDate = (weekly: Weekly, dayOfWeek?: DayOfWeek): Date => {
@@ -61,6 +79,12 @@ const getAddedDate = (add: number): Date => {
   targetDate.setDate(targetDate.getDate() + add);
   return targetDate;
 };
+
+const getAddedMonth = (add: number): Date => {
+  const targetDate = new Date();
+  targetDate.setMonth(targetDate.getMonth() + add);
+  return targetDate;
+};;
 
 const weeklyDate = (when: WeeklyWhen, dayOfWeek: DayOfWeek): Date => {
   const targetWeek = getAddedDate(whenMapping[when]);

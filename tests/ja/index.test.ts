@@ -1,5 +1,5 @@
 import { advanceTo, clear } from "jest-date-mock";
-import { whenToDate, weeklyToDate, monthlyToDate } from "#/ja";
+import { whenToDate, weeklyToDate, monthlyToDate } from "^/ja";
 
 describe("whenToDate", () => {
   beforeAll(() => {

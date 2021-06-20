@@ -13,8 +13,9 @@ export type Weekly = `${number}週間後` | `${number}週間前`;
 
 export type Monthly = `${number}ヶ月後` | `${number}ヶ月前`;
 
-export const toDate = (w: When | Weekly): Date => {
+export const toDate = (w: When | Weekly | Monthly): Date => {
   if (w.includes("週間")) return weeklyToDate(w as Weekly);
+  if (w.includes("ヶ月")) return monthlyToDate(w as Monthly);
   return whenToDate(w as When);
 };
 

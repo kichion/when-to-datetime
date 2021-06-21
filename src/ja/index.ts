@@ -13,22 +13,57 @@ export type Weekly = `${number}週間後` | `${number}週間前`;
 
 export type Monthly = `${number}ヶ月後` | `${number}ヶ月前`;
 
+type ofTheMonth = "月初" | "月末";
+
+type monthlyOption = {
+  dayOfWeek?: DayOfWeek;
+  ofTheMonth?: ofTheMonth;
+};
+
 export const toDate = (w: When | Weekly | Monthly): Date => {
   if (w.includes("週間")) return weeklyToDate(w as Weekly);
   if (w.includes("ヶ月")) return monthlyToDate(w as Monthly);
   return whenToDate(w as When);
 };
 
-export const monthlyToDate = (monthly: Monthly, dayOfWeek?: DayOfWeek): Date => {
+export const monthlyToDate = (
+  monthly: Monthly,
+  option?: monthlyOption
+): Date => {
   const month = monthly.split("ヶ月");
   const offset = month[1] === "後" ? 1 : -1;
   const targetMonth = getAddedMonth(+month[0] * offset);
-  if (!dayOfWeek) return targetMonth;
+  if (option?.dayOfWeek) {
+    return monthlyToDateByDayOfWeek(targetMonth, option.dayOfWeek);
+  } else if (option?.ofTheMonth)
+    return monthlyToDateByOfTheMonth(targetMonth, option.ofTheMonth);
+  return targetMonth;
+};
 
+const monthlyToDateByDayOfWeek = (
+  targetMonth: Date,
+  dayOfWeek: DayOfWeek
+): Date => {
   const day: dayOfWeek = (dayOfWeek as string).charAt(0) as dayOfWeek;
   targetMonth.setDate(
     targetMonth.getDate() + dayOfWeekMapping[day] - targetMonth.getDay()
   );
+  return targetMonth;
+};
+
+const monthlyToDateByOfTheMonth = (
+  targetMonth: Date,
+  ofTheMonth: ofTheMonth
+): Date => {
+  switch (ofTheMonth) {
+    case "月初":
+      targetMonth.setDate(1);
+      break;
+    case "月末":
+      targetMonth.setMonth(targetMonth.getMonth() + 1);
+      targetMonth.setDate(0);
+      break;
+  }
   return targetMonth;
 };
 
@@ -85,7 +120,7 @@ const getAddedMonth = (add: number): Date => {
   const targetDate = new Date();
   targetDate.setMonth(targetDate.getMonth() + add);
   return targetDate;
-};;
+};
 
 const weeklyDate = (when: WeeklyWhen, dayOfWeek: DayOfWeek): Date => {
   const targetWeek = getAddedDate(whenMapping[when]);

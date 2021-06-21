@@ -118,6 +118,48 @@ describe("weeklyToDate", () => {
   });
 });
 
+describe("monthlyToDate dayOfWeek", () => {
+  beforeAll(() => {
+    advanceTo(new Date("2019/8/1 12:00:00"));
+  });
+  afterAll(() => {
+    clear();
+  });
+
+  test("4ヶ月前 火曜日は4月前の火曜日を返す", () => {
+    expect(monthlyToDate("4ヶ月前", { dayOfWeek: "火曜日" })).toEqual(
+      new Date("2019/4/2 12:00:00")
+    );
+  });
+
+  test("3ヶ月後 土は3月後の土曜日を返す", () => {
+    expect(monthlyToDate("3ヶ月後", { dayOfWeek: "土" })).toEqual(
+      new Date("2019/11/2 12:00:00")
+    );
+  });
+});
+
+describe("monthlyToDate ofTheMonth", () => {
+  beforeAll(() => {
+    advanceTo(new Date("2019/8/1 12:00:00"));
+  });
+  afterAll(() => {
+    clear();
+  });
+
+  test("4ヶ月後 月初は4月後の1日を返す", () => {
+    expect(monthlyToDate("4ヶ月後", { ofTheMonth: "月初" })).toEqual(
+      new Date("2019/12/1 12:00:00")
+    );
+  });
+
+  test("2ヶ月前 月末は2月前の末日を返す", () => {
+    expect(monthlyToDate("2ヶ月前", { ofTheMonth: "月末" })).toEqual(
+      new Date("2019/6/30 12:00:00")
+    );
+  });
+});
+
 describe("monthlyToDate", () => {
   beforeAll(() => {
     advanceTo(new Date("2019/8/1 12:00:00"));
@@ -140,17 +182,5 @@ describe("monthlyToDate", () => {
 
   test("8ヶ月前は8月前を返す", () => {
     expect(monthlyToDate("8ヶ月前")).toEqual(new Date("2018/12/1 12:00:00"));
-  });
-
-  test("4ヶ月前 火曜日は4月前の火曜日を返す", () => {
-    expect(monthlyToDate("4ヶ月前", "火曜日")).toEqual(
-      new Date("2019/4/2 12:00:00")
-    );
-  });
-
-  test("3ヶ月後 土は3月後の土曜日を返す", () => {
-    expect(monthlyToDate("3ヶ月後", "土")).toEqual(
-      new Date("2019/11/2 12:00:00")
-    );
   });
 });

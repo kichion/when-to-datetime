@@ -35,6 +35,15 @@ describe("whenToDate", () => {
     targetDate.setDate(targetDate.getDate() - 2);
     expect(whenToDate("一昨日")).toEqual(targetDate);
   });
+});
+
+describe("whenToDate weekly", () => {
+  beforeAll(() => {
+    advanceTo(new Date("2019/8/1 12:00:00"));
+  });
+  afterAll(() => {
+    clear();
+  });
 
   test("来週は7日後を返す", () => {
     const targetDate = new Date();
@@ -77,6 +86,59 @@ describe("whenToDate", () => {
   test("先々週 木曜日は再来週金曜日の日付を返す", () => {
     expect(whenToDate("先々週", "木曜日")).toEqual(
       new Date("2019/7/18 12:00:00")
+    );
+  });
+});
+
+describe("whenToDate monthly", () => {
+  beforeAll(() => {
+    advanceTo(new Date("2019/8/1 12:00:00"));
+  });
+  afterAll(() => {
+    clear();
+  });
+
+  test("来月は翌月を返す", () => {
+    const targetDate = new Date();
+    targetDate.setMonth(targetDate.getMonth() + 1);
+    expect(whenToDate("来月")).toEqual(targetDate);
+  });
+
+  test("先月は前月を返す", () => {
+    const targetDate = new Date();
+    targetDate.setMonth(targetDate.getMonth() - 1);
+    expect(whenToDate("先月")).toEqual(targetDate);
+  });
+
+  test("再来月は2ヶ月後を返す", () => {
+    const targetDate = new Date();
+    targetDate.setMonth(targetDate.getMonth() + 2);
+    expect(whenToDate("再来月")).toEqual(targetDate);
+  });
+
+  test("先々月は2ヶ月前を返す", () => {
+    const targetDate = new Date();
+    targetDate.setMonth(targetDate.getMonth() - 2);
+    expect(whenToDate("先々月")).toEqual(targetDate);
+  });
+
+  test("来月 火曜は翌週火曜日の日付を返す", () => {
+    expect(whenToDate("来月", "火曜")).toEqual(new Date("2019/09/03 12:00:00"));
+  });
+
+  test("再来月 金曜日は再来月金曜日の日付を返す", () => {
+    expect(whenToDate("再来月", "金曜日")).toEqual(
+      new Date("2019/10/04 12:00:00")
+    );
+  });
+
+  test("先月 月は先月月曜日の日付を返す", () => {
+    expect(whenToDate("先月", "月")).toEqual(new Date("2019/07/01 12:00:00"));
+  });
+
+  test("先々月 木曜日は再来週金曜日の日付を返す", () => {
+    expect(whenToDate("先々月", "木曜日")).toEqual(
+      new Date("2019/05/30 12:00:00")
     );
   });
 });
